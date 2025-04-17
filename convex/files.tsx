@@ -47,7 +47,7 @@ export const updateWhiteboard = mutation({
     }, 
 })
 
-export const getFileById = query({
+export const getFileById=query({
     args:{
         _id:v.id('files')
     },
@@ -55,4 +55,4 @@ export const getFileById = query({
         const result=await ctx.db.get(args._id);
         return result;
     },
-}) 
+})
