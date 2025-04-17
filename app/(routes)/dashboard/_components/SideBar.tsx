@@ -38,7 +38,7 @@ const SideBarDashboard = () => {
     }
 
     const getFile = async() => {
-        const result = await convex.query(api.files.getFiles, { teamId : activeTeam?._id });
+        const result = await convex.query(api.files.getFiles, { teamId : activeTeam?._id || "" });
         setFileList_(result);
         setTotalFiles(result?.length);
     }
