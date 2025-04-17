@@ -15,15 +15,15 @@ const Workspace = () => {
   const convex = useConvex();
   const [fileData, setFileData] = useState<FILE | any >(); 
 
+  useEffect(()=>{
+    fileId && getFileData();
+  }, [fileId])
+
   const getFileData = async() => {
-    const result = await convex.query(api.files.getFileById, { fileId:fileId });
+    const result = await convex.query(api.files.getFileById, { fileId:fileId || "" });
     console.log('File Data', result);
     setFileData(result);
   }
-
-  useEffect(()=>{
-     fileId && getFileData();
-  }, [fileId])
 
   return (
     <div className="">
