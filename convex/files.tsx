@@ -48,10 +48,11 @@ export const updateWhiteboard = mutation({
 })
 
 export const getFileById = query({
-    args: { 
-        fileId: v.id('files'),
+    args:{
+        _id:v.id('files')
     },
-    handler: async(ctx, args_0) => {
-        return await ctx.db.get(args_0.fileId);
+    handler:async(ctx, args)=> {
+        const result=await ctx.db.get(args._id);
+        return result;
     },
 }) 
