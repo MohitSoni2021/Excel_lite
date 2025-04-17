@@ -19,7 +19,7 @@ const SideBarDashboard = () => {
 
     const { fileList_, setFileList_ }:any = useContext(FilesListContext);
 
-    const CreateNewFile = async(FileName:string) => {
+    const CreateNewFile = async(FileName:any) => {
         createFile({
             fileName: FileName,
             createdBy: user?.email,
