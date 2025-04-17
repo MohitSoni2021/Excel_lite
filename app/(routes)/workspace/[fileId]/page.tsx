@@ -22,9 +22,8 @@ const Workspace = () => {
   }
 
   useEffect(()=>{
-     console.log("fileId => ", fileId);
      fileId && getFileData();
-  }, [])
+  }, [fileId])
 
   return (
     <div className="">
