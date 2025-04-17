@@ -16,7 +16,7 @@ const Workspace = () => {
   const [fileData, setFileData] = useState<FILE | any >(); 
 
   const getFileData = async() => {
-    const result = await convex.query(api.files.getFileById, { fileId });
+    const result = await convex.query(api.files.getFileById, { fileId:fileId });
     console.log('File Data', result);
     setFileData(result);
   }
