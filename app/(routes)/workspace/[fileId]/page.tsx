@@ -8,6 +8,7 @@ import { useConvex } from 'convex/react'
 import { api } from '@/convex/_generated/api'
 import { FILE } from '../../dashboard/_components/FileList'
 import Canvas from '../_components/Canvas'
+import { Id } from '@/convex/_generated/dataModel'
  
 const Workspace = () => {
   const [triggerSave, setTriggerSave] = useState<boolean>(false); 
@@ -20,7 +21,7 @@ const Workspace = () => {
   }, [fileId])
 
   const getFileData = async() => {
-    const result = await convex.query(api.files.getFileById, { fileId:fileId || "" });
+    const result = await convex.query(api.files.getFileById, { fileId:fileId || "" as Id<"files"> });
     console.log('File Data', result);
     setFileData(result);
   }
