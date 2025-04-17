@@ -1,23 +1,29 @@
 
 "use client"
-
-import React, { useEffect, useRef, useState } from 'react'
+import type { ToolConstructable } from '@editorjs/editorjs';
 // @ts-ignore
-import EditorJS from '@editorjs/editorjs'
+import EditorJS from '@editorjs/editorjs';
 // @ts-ignore
-import Header from '@editorjs/header';
+import HeaderTool from '@editorjs/header';
 // @ts-ignore
-import List from "@editorjs/list";
+import ListTool from '@editorjs/list';
 // @ts-ignore
-import Checklist from '@editorjs/checklist'
+import ChecklistTool from '@editorjs/checklist';
 // @ts-ignore
-import Paragraph from '@editorjs/paragraph';
+import ParagraphTool from '@editorjs/paragraph';
 // @ts-ignore
-import Warning from '@editorjs/warning';
+import WarningTool from '@editorjs/warning';
 import { useMutation } from 'convex/react';
+import { useEffect, useRef, useState } from 'react';
 import { api } from '@/convex/_generated/api';
 import { toast } from 'sonner';
-import { FILE } from '../../dashboard/_components/FileList';
+
+const Header = HeaderTool as unknown as ToolConstructable;
+const List = ListTool as unknown as ToolConstructable;
+const Checklist = ChecklistTool as unknown as ToolConstructable;
+const Paragraph = ParagraphTool as unknown as ToolConstructable;
+const Warning = WarningTool as unknown as ToolConstructable;
+
 
 
 const rawDocument = {
@@ -40,6 +46,8 @@ const EditorSetion = ({onDocumentSave, fileId, fileData}:any) => {
 
     const initEditor = () => {
         const editor = new EditorJS({
+            holder: 'editorjs',
+            data: fileData?.document ? JSON.parse(fileData.document) : rawDocument,
             tools: {
                 header: {
                     class: Header,
@@ -59,14 +67,20 @@ const EditorSetion = ({onDocumentSave, fileId, fileData}:any) => {
                     class: Checklist,
                     inlineToolbar: true,
                 },
-                paragraph: Paragraph,
-                warning: Warning,
+                paragraph: {
+                    class: Paragraph,
+                    inlineToolbar: true,
+                },
+                warning: {
+                    class: Warning,
+                    inlineToolbar: true,
+                },
             },
-            holder: 'editorjs',
-            data: fileData?.document ? JSON.parse(fileData?.document ) : rawDocument ,
         });
+    
         ref.current = editor;
     }
+    
 
     const onSaveDoument = () => {
         if(ref.current) {
