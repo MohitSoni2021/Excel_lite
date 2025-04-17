@@ -23,7 +23,7 @@ const SideBarDashboard = () => {
         createFile({
             fileName: FileName,
             createdBy: user?.email,
-            teamId: activeTeam?._id,
+            teamId: activeTeam?._id || "",
             archived: false,
             document: '',
             whiteboard: '',
