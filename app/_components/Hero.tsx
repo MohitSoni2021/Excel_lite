@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import HeroAnimation from './HeroAnimation';
 import { Button } from '@/components/ui/button';
 import { Pyramid } from 'lucide-react';
+import { RegisterLink } from '@kinde-oss/kinde-auth-nextjs';
 
 const HeroComponent: React.FC = () => {
   const heroRef = useRef<HTMLDivElement>(null);
@@ -62,17 +63,19 @@ const HeroComponent: React.FC = () => {
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 mt-2">
-              <Button 
-                className="px-8 py-3 text-base sm:text-lg font-medium"
+              <RegisterLink>
+              <button 
+                className="px-8 py-4 text-base sm:text-lg font-medium bg-blue-500 cursor-pointer text-white rounded-lg"
               >
                 Get Started for Free
-              </Button>
+              </button>
+              </RegisterLink>
               
-              <Button 
-                className="px-8 py-3 text-base sm:text-lg font-medium"
+              <button 
+                className="px-8 py-4 text-base sm:text-lg font-medium bg-stone-800 cursor-pointer text-white rounded-lg"
               >
                 See How It Works
-              </Button>
+              </button>
             </div>
             
             <div className="mt-12 flex items-center">
