@@ -13,6 +13,9 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { useRouter } from 'next/navigation';
+import HashLoaderComp from '@/app/_components/Loader';
+import { HashLoader } from 'react-spinners';
+import FileListLoader from '@/app/_components/Loaders/FileListLoader';
 
 
 
@@ -39,7 +42,9 @@ const FileList = () => {
     }, [fileList_])
 
     return (
-        <div>
+        <>
+        {
+            fileList && <div>
             <div className="overflow-x-auto mt-10">
                 <table className="min-w-full divide-y-2 divide-gray-200">
                     <thead className="ltr:text-left rtl:text-right">
@@ -86,6 +91,15 @@ const FileList = () => {
                 </table>
             </div>
         </div>
+        }
+
+        {
+            fileList.length === 0 && <div className="flex justify-center items-center h-screen">
+                {/* <HashLoaderComp message="loadingFiles" style={"items-start"} /> */}
+                <FileListLoader />
+            </div>
+        }
+        </>
     )
 }
 

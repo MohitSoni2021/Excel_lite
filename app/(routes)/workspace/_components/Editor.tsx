@@ -17,6 +17,7 @@ import { useMutation } from 'convex/react';
 import { useEffect, useRef, useState } from 'react';
 import { api } from '@/convex/_generated/api';
 import { toast } from 'sonner';
+import { Fullscreen } from 'lucide-react';
 
 const Header = HeaderTool as unknown as ToolConstructable;
 const List = ListTool as unknown as ToolConstructable;
@@ -43,6 +44,11 @@ const EditorSetion = ({onDocumentSave, fileId, fileData}:any) => {
     const ref = useRef<EditorJS>(null);
     const updateDoument = useMutation(api.files.updateDoument); 
     const [editorContent, setEditorContent] = useState<any>(rawDocument);
+    const [fullScreen, setIsFullscreen] = useState(false)
+
+    const toggleFullscreenOption = () => {
+        setIsFullscreen(!fullScreen)
+    }
 
     const initEditor = () => {
         const editor = new EditorJS({
@@ -108,8 +114,9 @@ const EditorSetion = ({onDocumentSave, fileId, fileData}:any) => {
     }, [onDocumentSave])
 
     return (
-        <div>
-            <div id="editorjs"></div>
+        <div className={`relative bg-white ${fullScreen ? "absolute top-0 left-0 w-screen overflow-x-hidden h-[calc(100vh-70px)] z-20" : ""}`}>
+            <button className={`absolute cursor-pointer z-10 top-1 right-1 p-1 rounded-lg ${(fullScreen?"bg-black text-white":"bg-gray-200")}`} onClick={toggleFullscreenOption} ><Fullscreen className='p-1' /></button>
+            <div className='w-full' id="editorjs"></div>
         </div>
     )
 }

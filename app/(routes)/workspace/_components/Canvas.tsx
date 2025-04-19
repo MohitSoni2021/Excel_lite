@@ -5,6 +5,18 @@ import { FILE } from '../../dashboard/_components/FileList';
 import { useMutation } from 'convex/react';
 import { api } from '@/convex/_generated/api';
 import { toast } from 'sonner';
+import { Fullscreen } from 'lucide-react';
+
+
+
+const UIOptions = {
+  };
+
+  const TopRightUI = ({active, toggleFullscreenOption}:any) => {
+    return (
+      <button className={` p-1 rounded-lg ${(active?"bg-black text-white":"bg-gray-50/10")}`} onClick={toggleFullscreenOption} ><Fullscreen className='p-1' /></button>
+    )
+  }
 
 const Canvas = (
     {
@@ -20,6 +32,12 @@ const Canvas = (
 
         const [whiteBoardData, setWhiteBoardData] = useState<any>()
         const updateWhiteboard = useMutation(api.files.updateWhiteboard); 
+        const fullScreen = "absolute top-[70px] left-0 w-full z-20"
+        const [isFullScreen, setIsFullscreen] = useState(false)
+
+        const toggleFullscreen = () => {
+            setIsFullscreen(!isFullScreen)
+        }
 
         const saveWhiteboard = () => {
             console.log("saving the canvas....")
@@ -42,9 +60,12 @@ const Canvas = (
   return (
 
     <>
-      <div style={{ height: "100vh" }}>
+      <div className={`h-[calc(100vh-70px)] ${isFullScreen ? fullScreen : ""}`}>
         {
             fileData && <Excalidraw
+            renderTopRightUI={() => <TopRightUI active={isFullScreen} toggleFullscreenOption={toggleFullscreen} />}
+            UIOptions={UIOptions}
+            theme='light'
             initialData={{
                 elements: fileData?.whiteboard && JSON.parse(fileData?.whiteboard)
             }}
