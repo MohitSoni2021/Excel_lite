@@ -1,0 +1,1 @@
+export const MAX_FREE_FILES_CREATION_COUNT = 10;

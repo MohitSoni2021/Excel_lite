@@ -1,6 +1,7 @@
 import { Button } from '@/components/ui/button';
-import { Link, Pyramid, Save } from 'lucide-react';
+import { Link as LinkIcon, Pyramid, Save } from 'lucide-react';
 import React from 'react'
+import Link from 'next/link';
 
 const WorkspaceHeader = ({onSave, fileName}:any ) => {
   return (
@@ -14,10 +15,7 @@ const WorkspaceHeader = ({onSave, fileName}:any ) => {
         className='cursor-pointer bg-blue-500' onClick={()=>onSave()}> 
           <Save /> 
         </Button>
-        {/* <Button 
-        className='cursor-pointer' > 
-          <Link /> Share
-        </Button> */}
+        <Link href={`/dashboard`}><Button className='cursor-pointer' >Dashboard</Button></Link>
       </div>
     </div>
   )

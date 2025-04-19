@@ -12,9 +12,11 @@ import {
 } from "@/components/ui/dialog"
 import { DialogClose } from '@radix-ui/react-dialog'
 import { Input } from '@/components/ui/input'
+import { MAX_FREE_FILES_CREATION_COUNT } from '@/app/_constants/UsagesCounts'
+import SkeletonLoader from '@/app/_components/Loaders/SkeletonLoader'
 
 
-const SideBarBottomDashboard = ({onFileCreate, totalFiles}:any) => {
+const SideBarBottomDashboard = ({ onFileCreate, totalFiles }: any) => {
 
     const Menu = [
         {
@@ -77,10 +79,10 @@ const SideBarBottomDashboard = ({onFileCreate, totalFiles}:any) => {
                         <DialogClose asChild>
                             <Button
                                 type="button"
-                                onClick={()=>onFileCreate(FileName)}
+                                onClick={() => onFileCreate(FileName)}
                                 className='cursor-pointer'
                                 disabled={!(FileName && FileName?.length > 0)}
-                                >
+                            >
                                 Create
                             </Button>
                         </DialogClose>
@@ -88,16 +90,25 @@ const SideBarBottomDashboard = ({onFileCreate, totalFiles}:any) => {
                 </DialogContent>
             </Dialog>
 
-            <div className="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700 mt-4 overflow-hidden">
-            <div
-                className="bg-black h-2.5 rounded-full"
-                style={{ width: `${(totalFiles || 0) * 10}%` }} // Adjust the percentage as needed
-            ></div>
-            </div>
+            {
+                totalFiles &&
+                <>
+                    <div className="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700 mt-4 overflow-hidden">
+                        <div
+                            className="bg-black h-2.5 rounded-full"
+                            style={{ width: `${(totalFiles || 0) * MAX_FREE_FILES_CREATION_COUNT}%` }} // Adjust the percentage as needed
+                        ></div>
+                    </div>
 
-            <p>
-                <strong>{totalFiles}</strong> out of 10 files are Created
-            </p>
+                    <p>
+                        <strong>{totalFiles}</strong> out of 10 files are Created
+                    </p>
+                </>
+            }
+
+            {
+                !totalFiles && <SkeletonLoader className='w-full mt-4' height={30} />
+            }
 
 
 

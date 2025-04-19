@@ -12,6 +12,7 @@ import Image from 'next/image'
 import { useConvex } from 'convex/react'
 import { api } from '@/convex/_generated/api'
 import Link from 'next/link'
+import SkeletonLoader from '@/app/_components/Loaders/SkeletonLoader'
 
 
 export interface Team {
@@ -61,12 +62,18 @@ const SideBarUpperDashboard = ({ user, setActiveTeamInfo }: any) => {
       <div className="">
         <Popover>
           <PopoverTrigger className='w-full'>
-            <div className="p-3 hover:bg-gray-200 rounded-md cursor-pointer flex gap-2 items-center">
-            <Pyramid />
-              <h2 className='flex gap-2 items-center justify-between font-bold w-full'>
-                {activeTeam?.teamName} <ChevronDown />
-              </h2>
-            </div>
+            {
+              activeTeam && <div className="p-3 hover:bg-gray-200 rounded-md cursor-pointer flex gap-2 items-center">
+              <Pyramid />
+                <h2 className='flex gap-2 items-center justify-between font-bold w-full'>
+                  {activeTeam?.teamName} <ChevronDown />
+                </h2>
+              </div>
+            }
+
+            {
+              !activeTeam && <SkeletonLoader className='w-full' height={30} />
+            }
           </PopoverTrigger>
 
           <PopoverContent className='ml-6 p-4'>
