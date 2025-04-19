@@ -63,16 +63,16 @@ const SideBarBottomDashboard = ({ onFileCreate, totalFiles }: any) => {
 
             <Dialog>
                 <DialogTrigger className='w-full cursor-pointer' asChild>
-                    <Button className='w-full flex justify-start mt-3' disabled={totalFiles>=MAX_FREE_FILES_CREATION_COUNT}>
+                    <Button className='w-full flex justify-start mt-3' >
                         Add New File
                     </Button>
                 </DialogTrigger>
                 <DialogContent className='w-full max-w-lg p-5'>
                     <DialogHeader>
-                        <DialogTitle className='mb-5'>{ (totalFiles == 5)? "File Limit Exceeded" : "Create New File" }</DialogTitle>
+                        <DialogTitle className='mb-5'>{ (totalFiles == MAX_FREE_FILES_CREATION_COUNT)? "File Limit Exceeded" : "Create New File" }</DialogTitle>
                         <DialogDescription asChild>
                             {
-                                (totalFiles == 5) ?
+                                (totalFiles == MAX_FREE_FILES_CREATION_COUNT) ?
                                 <div>
                                     <div className="flex gap-3 my-5">
                                         <PricingCard />
@@ -87,7 +87,7 @@ const SideBarBottomDashboard = ({ onFileCreate, totalFiles }: any) => {
                         </DialogDescription>
                     </DialogHeader>
                     {
-                        (totalFiles == 5) ? null :
+                        (totalFiles == MAX_FREE_FILES_CREATION_COUNT) ? null :
                         <DialogFooter className="">
                         <DialogClose asChild>
                             <Button
