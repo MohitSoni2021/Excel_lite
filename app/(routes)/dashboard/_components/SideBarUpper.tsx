@@ -1,4 +1,4 @@
-import { ChevronDown, LayoutGrid, LogOut, Settings, Users } from 'lucide-react'
+import { ChevronDown, LayoutGrid, LogOut, Pyramid, Settings, Users } from 'lucide-react'
 import React, { useEffect, useState } from 'react'
 import {
   Popover,
@@ -51,7 +51,7 @@ const SideBarUpperDashboard = ({ user, setActiveTeamInfo }: any) => {
     user && getTeamList();
   }, [user])
 
-  useEffect(()=>{
+  useEffect(() => {
     activeTeam && setActiveTeamInfo(activeTeam);
   }, [activeTeam])
 
@@ -61,8 +61,9 @@ const SideBarUpperDashboard = ({ user, setActiveTeamInfo }: any) => {
       <div className="">
         <Popover>
           <PopoverTrigger className='w-full'>
-            <div className="p-3 hover:bg-gray-200 rounded-md cursor-pointer">
-              <h2 className='flex gap-2 items-center justify-between font-bold'>
+            <div className="p-3 hover:bg-gray-200 rounded-md cursor-pointer flex gap-2 items-center">
+            <Pyramid />
+              <h2 className='flex gap-2 items-center justify-between font-bold w-full'>
                 {activeTeam?.teamName} <ChevronDown />
               </h2>
             </div>

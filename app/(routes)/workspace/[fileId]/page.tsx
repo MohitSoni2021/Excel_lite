@@ -47,7 +47,7 @@ const Workspace = ({ params }: any) => {
       <div className="">
         {
           fileData && <>
-            <WorkspaceHeader fileName={fileData?.fileName} onSave={() => setTriggerSave(!triggerSave)} />
+            <WorkspaceHeader fileName={fileData?.fileName} onSave={() => {setTriggerSave(!triggerSave)}} />
 
             <div className="grid grid-cols-1 md:grid-cols-2 ">
               <div className="h-[calc(100vh-70px)]">

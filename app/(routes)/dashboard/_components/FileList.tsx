@@ -67,9 +67,8 @@ const FileList = () => {
                                     <td className="px-3 py-2 whitespace-nowrap">{moment(file._creationTime).format("DD MMM YYYY")}</td>
                                     <td className="px-3 py-2 whitespace-nowrap">{moment(file._creationTime).format("DD MMM YYYY")}</td>
                                     <td className="px-3 py-2 whitespace-nowrap">
-                                        <div className="flex items-center gap-2">
+                                        <div className="flex items-center gap-2 ">
                                             <img src={user?.picture} alt="" className='w-8 h-8 rounded-full' />
-                                            <span>{file.createdBy}</span>
                                         </div>
                                     </td>
                                     <td className="px-3 py-2 whitespace-nowrap">
