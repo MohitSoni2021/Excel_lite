@@ -14,6 +14,7 @@ import { DialogClose } from '@radix-ui/react-dialog'
 import { Input } from '@/components/ui/input'
 import { MAX_FREE_FILES_CREATION_COUNT } from '@/app/_constants/UsagesCounts'
 import SkeletonLoader from '@/app/_components/Loaders/SkeletonLoader'
+import PricingCard from '@/app/_components/PricingCard'
 
 
 const SideBarBottomDashboard = ({ onFileCreate, totalFiles }: any) => {
@@ -40,6 +41,7 @@ const SideBarBottomDashboard = ({ onFileCreate, totalFiles }: any) => {
     ]
 
     const [FileName, setFileName] = useState('');
+    const [isLoading, setIsLoading] = useState(true)
 
     const createNewFile = () => {
         console.log('File Name', FileName);
@@ -61,21 +63,32 @@ const SideBarBottomDashboard = ({ onFileCreate, totalFiles }: any) => {
 
             <Dialog>
                 <DialogTrigger className='w-full cursor-pointer' asChild>
-                    <Button className='w-full flex justify-start mt-3'>
+                    <Button className='w-full flex justify-start mt-3' disabled={totalFiles>=MAX_FREE_FILES_CREATION_COUNT}>
                         Add New File
                     </Button>
                 </DialogTrigger>
-                <DialogContent>
+                <DialogContent className='w-full max-w-lg p-5'>
                     <DialogHeader>
-                        <DialogTitle>Create New File</DialogTitle>
+                        <DialogTitle className='mb-5'>{ (totalFiles == 5)? "File Limit Exceeded" : "Create New File" }</DialogTitle>
                         <DialogDescription asChild>
-                            <div className="">
+                            {
+                                (totalFiles == 5) ?
+                                <div>
+                                    <div className="flex gap-3 my-5">
+                                        <PricingCard />
+                                    </div>
+                                </div>
+                                :
+                                <div className="">
                                 <Input
                                     value={FileName} onChange={(e) => setFileName(e.target.value)} placeholder='Enter Your File Name' className='my-2 text-black ' />
                             </div>
+                            }
                         </DialogDescription>
                     </DialogHeader>
-                    <DialogFooter className="">
+                    {
+                        (totalFiles == 5) ? null :
+                        <DialogFooter className="">
                         <DialogClose asChild>
                             <Button
                                 type="button"
@@ -87,11 +100,11 @@ const SideBarBottomDashboard = ({ onFileCreate, totalFiles }: any) => {
                             </Button>
                         </DialogClose>
                     </DialogFooter>
+                    }
                 </DialogContent>
             </Dialog>
 
             {
-                totalFiles &&
                 <>
                     <div className="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700 mt-4 overflow-hidden">
                         <div
@@ -101,13 +114,9 @@ const SideBarBottomDashboard = ({ onFileCreate, totalFiles }: any) => {
                     </div>
 
                     <p>
-                        <strong>{totalFiles}</strong> out of 10 files are Created
+                        <strong>{totalFiles || 0}</strong> out of 10 files are Created
                     </p>
                 </>
-            }
-
-            {
-                !totalFiles && <SkeletonLoader className='w-full mt-4' height={30} />
             }
 
 
