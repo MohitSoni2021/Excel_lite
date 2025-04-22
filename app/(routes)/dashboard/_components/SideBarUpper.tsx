@@ -13,6 +13,7 @@ import { useConvex } from 'convex/react'
 import { api } from '@/convex/_generated/api'
 import Link from 'next/link'
 import SkeletonLoader from '@/app/_components/Loaders/SkeletonLoader'
+import { MAX_FREE_TEAMS_CREATION_COUNT } from '@/app/_constants/UsagesCounts'
 
 
 export interface Team {
@@ -22,29 +23,34 @@ export interface Team {
 }
 const SideBarUpperDashboard = ({ user, setActiveTeamInfo }: any) => {
 
-  const menu = [
+  
+  const convex = useConvex();
+  const [teamList, setTeamList] = useState<Team[]>();
+  const [activeTeam, setActiveTeam] = useState<Team>();
+  const [teamListLength, setTeamListLength] = useState<number>();
+  
+  const [menu, setMenu] = useState<{ id: number; name: string; icon: any; path: string; disabled: boolean }[]>([
     {
       id: 1,
       name: "Create Team",
       icon: Users,
-      path: "/teams/create",
+      path: ((teamListLength ?? 0) >= MAX_FREE_TEAMS_CREATION_COUNT) ? "/teams/create" : "plans",
+      disabled: false
     },
     {
       id: 2,
       name: "Settings",
       path: "",
-      icon: Settings
+      icon: Settings,
+      disabled: false
     }
-  ]
-
-  const convex = useConvex();
-  const [teamList, setTeamList] = useState<Team[]>();
-  const [activeTeam, setActiveTeam] = useState<Team>();
+  ]);
 
   const getTeamList = async () => {
     const results = await convex.query(api.teams.getTeam, { email: user?.email });
     console.log('Team List', results);
     setTeamList(results);
+    setTeamListLength(results?.length);
     setActiveTeam(results[0]);
   }
 
@@ -98,10 +104,13 @@ const SideBarUpperDashboard = ({ user, setActiveTeamInfo }: any) => {
                 {
                   menu.map((item) => (
                     <Link href={item.path} key={item.id}>
-                      <div key={item.id} className="flex gap-2 items-center text-xs">
+                      <button 
+                      key={item.id}
+                      disabled={item.disabled} 
+                      className="flex gap-2 items-center text-xs cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed">
                         <item.icon className="w-5 h-5 text-gray-700" />
                         <span>{item.name}</span>
-                      </div>
+                      </button>
                     </Link>
                   ))
                 }

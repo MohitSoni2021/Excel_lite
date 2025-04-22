@@ -15,7 +15,7 @@ import { Input } from '@/components/ui/input'
 import { MAX_FREE_FILES_CREATION_COUNT } from '@/app/_constants/UsagesCounts'
 import SkeletonLoader from '@/app/_components/Loaders/SkeletonLoader'
 import PricingCard from '@/app/_components/PricingCard'
-
+import Link from 'next/link'
 
 const SideBarBottomDashboard = ({ onFileCreate, totalFiles }: any) => {
 
@@ -62,11 +62,19 @@ const SideBarBottomDashboard = ({ onFileCreate, totalFiles }: any) => {
             </div>
 
             <Dialog>
-                <DialogTrigger className='w-full cursor-pointer' asChild>
-                    <Button className='w-full flex justify-start mt-3' >
-                        Add New File
-                    </Button>
-                </DialogTrigger>
+                {totalFiles == MAX_FREE_FILES_CREATION_COUNT ? (
+                    <Link href="/plans" className='w-full'>
+                        <Button className='w-full flex justify-start mt-3'>
+                            Add New File
+                        </Button>
+                    </Link>
+                ) : (
+                    <DialogTrigger className='w-full cursor-pointer' asChild>
+                        <Button className='w-full flex justify-start mt-3'>
+                            Add New File
+                        </Button>
+                    </DialogTrigger>
+                )}
                 <DialogContent className='w-full max-w-lg p-5'>
                     <DialogHeader>
                         <DialogTitle className='mb-5'>{ (totalFiles == MAX_FREE_FILES_CREATION_COUNT)? "File Limit Exceeded" : "Create New File" }</DialogTitle>
@@ -109,12 +117,12 @@ const SideBarBottomDashboard = ({ onFileCreate, totalFiles }: any) => {
                     <div className="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700 mt-4 overflow-hidden">
                         <div
                             className="bg-black h-2.5 rounded-full"
-                            style={{ width: `${(totalFiles || 0) * MAX_FREE_FILES_CREATION_COUNT}%` }} // Adjust the percentage as needed
+                            style={{ width: `${((totalFiles || 0) / MAX_FREE_FILES_CREATION_COUNT) * 100}%` }} 
                         ></div>
                     </div>
 
                     <p>
-                        <strong>{totalFiles || 0}</strong> out of 10 files are Created
+                        <strong>{totalFiles || 0}</strong> out of {MAX_FREE_FILES_CREATION_COUNT} files are Created
                     </p>
                 </>
             }
