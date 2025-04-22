@@ -1,5 +1,5 @@
 import { ChevronDown, LayoutGrid, LogOut, Pyramid, Settings, Users } from 'lucide-react'
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import {
   Popover,
   PopoverContent,
@@ -14,6 +14,8 @@ import { api } from '@/convex/_generated/api'
 import Link from 'next/link'
 import SkeletonLoader from '@/app/_components/Loaders/SkeletonLoader'
 import { MAX_FREE_TEAMS_CREATION_COUNT } from '@/app/_constants/UsagesCounts'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { FilesListContext } from '@/app/_context/FilesListContext'
 
 
 export interface Team {
@@ -22,13 +24,16 @@ export interface Team {
   createdBy: string;
 }
 const SideBarUpperDashboard = ({ user, setActiveTeamInfo }: any) => {
-
   
   const convex = useConvex();
   const [teamList, setTeamList] = useState<Team[]>();
   const [activeTeam, setActiveTeam] = useState<Team>();
   const [teamListLength, setTeamListLength] = useState<number>();
-  
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const team = searchParams.get('team');
+  const { contextDisplayFileType, setContextDisplayFileType } = useContext(FilesListContext);
+  const [selectedFiles, setSelectedFiles] = useState("allFiles");
   const [menu, setMenu] = useState<{ id: number; name: string; icon: any; path: string; disabled: boolean }[]>([
     {
       id: 1,
@@ -48,10 +53,17 @@ const SideBarUpperDashboard = ({ user, setActiveTeamInfo }: any) => {
 
   const getTeamList = async () => {
     const results = await convex.query(api.teams.getTeam, { email: user?.email });
-    console.log('Team List', results);
     setTeamList(results);
     setTeamListLength(results?.length);
-    setActiveTeam(results[0]);
+    
+    // Handle team selection from URL or default to first team
+    if (team) {
+      const decodedTeamName = decodeURIComponent(team);
+      const foundTeam = results?.find(teamItem => teamItem.teamName === decodedTeamName);
+      setActiveTeam(foundTeam || results[0]);
+    } else {
+      setActiveTeam(results[0]);
+    }
   }
 
   useEffect(() => {
@@ -60,7 +72,15 @@ const SideBarUpperDashboard = ({ user, setActiveTeamInfo }: any) => {
 
   useEffect(() => {
     activeTeam && setActiveTeamInfo(activeTeam);
+    if (activeTeam) {
+      const encodedTeamName = encodeURIComponent(activeTeam.teamName);
+      router.push(`/dashboard?team=${encodedTeamName}`);
+    }
   }, [activeTeam])
+
+  useEffect(() => {
+    contextDisplayFileType && setContextDisplayFileType(contextDisplayFileType);
+  }, [contextDisplayFileType])
 
   return (
     <>
@@ -142,7 +162,9 @@ const SideBarUpperDashboard = ({ user, setActiveTeamInfo }: any) => {
       </div>
 
       {/* Files section */}
-      <Button variant={'outline'} className='w-full justify-start bg-gray-100' >
+      <Button variant={'outline'} 
+        onClick={() => setContextDisplayFileType('allFiles')} 
+        className={`w-full justify-start ${(contextDisplayFileType == 'allFiles') ? "bg-gray-200" : ""}`} >
         <LayoutGrid /> All Files
       </Button>
 

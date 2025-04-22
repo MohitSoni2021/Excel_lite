@@ -1,5 +1,6 @@
 import { v } from 'convex/values';
 import { mutation, query } from './_generated/server';
+import { Id } from './_generated/dataModel';
 
 export const createFile = mutation({
     args: {
@@ -56,3 +57,23 @@ export const getFileById=query({
         return result;
     },
 })
+
+export const archiveFile = mutation({
+    args: {
+         _id: v.id('files'),
+         archived: v.boolean(),
+    },
+    handler: async(ctx, args_0) => {
+        return await ctx.db.patch (args_0._id, {archived: args_0.archived})
+    }
+}); 
+
+
+export const deleteFile = mutation({
+    args: {
+         _id: v.id('files'),
+    },
+    handler: async(ctx, args_0) => {
+        return await ctx.db.delete(args_0._id);
+    }
+}); 

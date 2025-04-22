@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button'
 import { Archive, Flag, Github } from 'lucide-react'
-import React, { useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import {
     Dialog,
     DialogContent,
@@ -16,35 +16,59 @@ import { MAX_FREE_FILES_CREATION_COUNT } from '@/app/_constants/UsagesCounts'
 import SkeletonLoader from '@/app/_components/Loaders/SkeletonLoader'
 import PricingCard from '@/app/_components/PricingCard'
 import Link from 'next/link'
+import { FilesListContext } from '@/app/_context/FilesListContext'
 
 const SideBarBottomDashboard = ({ onFileCreate, totalFiles }: any) => {
+    const { contextDisplayFileType, setContextDisplayFileType } = useContext(FilesListContext);
+    const [selectedFiles, setSelectedFiles] = useState(contextDisplayFileType);
 
-    const Menu = [
+    const [Menu, setMenu] = useState([
         {
             id: 1,
             name: "Getting Started",
             icon: Flag,
             path: "/",
+            additionalStyle: `${""}`,
+            action: ()=>{}
         },
         {
             id: 2,
             name: "Github",
             icon: Github,
             path: "/",
+            additionalStyle: ``,
+            action: ()=>{}
         },
         {
             id: 3,
             name: "Archive",
             icon: Archive,
             path: "/",
+            additionalStyle: `${(contextDisplayFileType == 'archived') ? "bg-gray-200" : ""}`,
+            action: ()=>{setContextDisplayFileType('archived')}
         }
-    ]
+    ]);
+
+    useEffect(()=>{
+        contextDisplayFileType && setSelectedFiles(contextDisplayFileType);
+        console.log(contextDisplayFileType)
+        setMenu(
+            Menu.map(item => {
+                if (item.name === "Archive") {
+                    return {
+                        ...item,
+                        additionalStyle: `${(contextDisplayFileType == 'archived') ? "bg-gray-200" : ""}`
+                    }
+                }
+                return item
+            })
+        )
+    }, [contextDisplayFileType])
 
     const [FileName, setFileName] = useState('');
     const [isLoading, setIsLoading] = useState(true)
 
     const createNewFile = () => {
-        console.log('File Name', FileName);
         setFileName('');
     }
 
@@ -53,7 +77,9 @@ const SideBarBottomDashboard = ({ onFileCreate, totalFiles }: any) => {
 
             <div className="">
                 {Menu.map((item) => (
-                    <div key={item.id} className="flex items-center gap-2 p-3 hover:bg-gray-200 rounded-md cursor-pointer">
+                    <div key={item.id} 
+                    onClick={item.action}
+                    className={`flex items-center gap-2 p-3 hover:bg-gray-200 rounded-md cursor-pointer ${item.additionalStyle}`}>
                         <item.icon className="w-5 h-5 text-gray-700" />
                         <span>{item.name}</span>
                     </div>
